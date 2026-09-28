@@ -86,7 +86,7 @@ def main():
         "-i",
         "--input-config",
         type=str,
-        default="vctk.yaml",
+        default="ljspeech.yaml",
         help="The name of the yaml config file under configs/data",
     )
 
@@ -140,11 +140,14 @@ def main():
         cfg["batch_size"] = args.batch_size
         cfg["train_filelist_path"] = str(os.path.join(root_path, cfg["train_filelist_path"]))
         cfg["valid_filelist_path"] = str(os.path.join(root_path, cfg["valid_filelist_path"]))
+        cfg["load_durations"] = False
 
     if args.output_folder is not None:
         output_folder = Path(args.output_folder)
     else:
-        output_folder = Path("data") / "processed_data" / cfg["name"] / "durations"
+        output_folder = Path(cfg["train_filelist_path"]).parent / "durations"
+
+    print(f"Output folder set to: {output_folder}")
 
     if os.path.exists(output_folder) and not args.force:
         print("Folder already exists. Use -f to force overwrite")
